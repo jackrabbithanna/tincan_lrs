@@ -1,0 +1,613 @@
+<?php
+
+/**
+ * @file
+ * Defines menu items common to the TinCan LRS modules.
+ */
+
+
+/**
+ * Implements hook_menu().
+ */
+function tincan_lrs_menu() {
+  $items = array();
+
+  // Top level "LRS" container.
+  $items['admin/lrs'] = array(
+    'title' => 'LRS',
+    'description' => 'Administer your LRS.',
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('access administration pages'),
+    'file path' => drupal_get_path('module', 'system'),
+    'file' => 'system.admin.inc',
+    'weight' => -7,
+  );
+  $items['admin/lrs/config'] = array(
+    'title' => 'Configuration',
+    'description' => 'Configure settings and business rules for your LRS.',
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 50,
+    'file path' => drupal_get_path('module', 'system'),
+    'file' => 'system.admin.inc',
+  );
+  $items['admin/lrs/config/settings'] = array(
+    'title' => 'General settings',
+    'description' => 'Configure the general TinCan LRS settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('tincan_lrs_settings_form'),
+    'access arguments' => array('configure lrs'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'includes/tincan_lrs.admin.inc',
+  );
+
+  return $items;
+}
+
+function tincan_lrs_permission() {
+  $permissions = array(
+    'configure lrs' => array(
+      'title' => t('Configure LRS settings'),
+      'description' => t('Allows users to configure the TinCan LRS.'),
+      'restrict access' => TRUE,
+    ),
+    'view tincan statements' => array(
+      'title' => t('View tincan statements'),
+      'description' => t('Allows users to view Tincan Statements'),
+      'restrict access' => TRUE,
+    ),
+    'view tincan agents' => array(
+      'title' => t('View tincan agents'),
+      'description' => t('Allows users to view Tincan Agents'),
+      'restrict access' => TRUE,
+    ),
+    'view tincan activities' => array(
+      'title' => t('View tincan activities'),
+      'description' => t('Allows users to view Tincan Activities'),
+      'restrict access' => TRUE,
+    ),
+    'view tincan states' => array(
+      'title' => t('View tincan states'),
+      'description' => t('Allows users to view Tincan States'),
+      'restrict access' => TRUE,
+    ),
+    'view tincan activity profiles' => array(
+      'title' => t('View Tincan Activity Profiles'),
+      'description' => t('Allows users to view Tincan Activity Profiles'),
+      'restrict access' => TRUE,
+    ),
+    'view tincan agent profiles' => array(
+      'title' => t('View Tincan Agent Profiles'),
+      'description' => t('Allows users to view Tincan Agent Profiles'),
+      'restrict access' => TRUE,
+    ),
+  );
+
+  return $permissions;
+}
+
+/**
+ * Implementation of hook_services_resources().
+ */
+function tincan_lrs_services_resources() {
+  return array(
+    'statements' => array(
+      
+      'retrieve' => array(
+        'help' => 'Statement API GET',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.statements',
+        ),
+        'callback' => '_tincan_lrs_statements_get_handler',
+        'access callback' => '_tincan_lrs_statements_get_handler_access',
+        'access arguments' => array('get'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+            'name' => 'statementId',
+            'type' => 'string',
+            'source' => array('path' => '0'),
+            'optional' => TRUE,
+          ),
+        ), // end args array
+      ), // end retrieve array
+     
+      'create'=> array(
+        'help' => 'Statement API POST',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.statements',
+        ),
+        'callback' => '_tincan_lrs_statements_post_handler',
+        'access callback' => '_tincan_lrs_statements_post_handler_access',
+        'access arguments' => array('create'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+            'name' => 'data',
+            'type' => 'struct',
+            'description' => 'The statement data object',
+            'source' => 'data',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+          array(
+            'name' => 'method',
+            'type' => 'string',
+            'source' => array('param' => 'method'),
+            'optional' => TRUE,
+            'default value' => 'none',
+          ),
+        ), // end args array
+      ), // end create array
+      
+      'update' => array(
+        'help' => 'Statement API PUT',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.statements',
+        ),
+        'callback' => '_tincan_lrs_statements_put_handler',
+        'access callback' => '_tincan_lrs_statements_put_handler_access',
+        'access arguments' => array('put'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+            'name' => 'statementId',
+            'type' => 'string',
+            'source' => array('path' => '0'),
+            'optional' => TRUE,
+          ),
+          array(
+            'name' => 'data',
+            'type' => 'struct',
+            'description' => 'The statement data object',
+            'source' => 'data',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+        ), // end args array
+      ), // end update array
+      'index' => array(
+        'help' => 'Statement API GET Index',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.statements',
+        ),
+        'callback' => '_tincan_lrs_statements_index_handler',
+        'access callback' => '_tincan_lrs_statements_get_handler_access',
+        'access arguments' => array('get'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+        ),
+      ),
+    ), // end statements array
+    
+    
+    'activities' => array(
+      'retrieve'=> array(
+        'help' => 'Activities GET',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.activities',
+        ),
+        'callback' => '_tincan_lrs_activities_get_handler',
+        'access callback' => '_tincan_lrs_activities_get_handler_access',
+        'access arguments' => array('create'),
+        'access arguments append' => TRUE,
+        'args' => array(
+        /*  array(
+            'name' => 'activity_type',
+            'type' => 'int',
+            'description' => 'Activity type that is being accessed',
+            'source' => array('path' => '0'),
+            'optional' => TRUE,
+          ),*/
+           array(
+            'name' => 'activityId',
+            'type' => 'string',
+            'source' => array('path' => '0'),
+            'optional' => FALSE,
+          ),
+          
+        ), //end args array
+      ), // end retrieve array
+    ), //end activities array
+      
+     'state' => array(
+      'retrieve' => array(
+        'help' => 'Activities State Get',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.activities',
+        ),
+        'callback' => '_tincan_lrs_activities_state_get_handler',
+        'access callback' => '_tincan_lrs_activities_state_get_handler_access',
+        'access arguments' => array('create'),
+        'access arguments append' => TRUE,
+        'args' => array(
+           array(
+            'name' => 'stateId',
+            'type' => 'string',
+            'source' => array('path' => '0'),
+            'optional' => FALSE,
+          ),
+        ), //end args array
+      ), //end retrieve array
+      
+    ), //end activities/state array
+    
+    'about' => array(
+      'index' => array(
+        'help' => 'TinCan LRS About resource',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.about',
+        ),
+        'callback' => '_tincan_lrs_about_index_handler',
+        'access callback' => '_tincan_lrs_about_index_handler_access',
+        'access arguments' => array('about'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+        ),
+      ), //end index 
+     ), //end about resource
+  ); //end return array
+    
+}
+
+function tincan_lrs_entity_info() {
+// Tincan Statement Entity definition
+  $return['tincan_statement'] = array(
+    'label' => t('Tincan Statement'),
+    'entity class' => 'TincanStatement',
+    'controller class' => 'TincanStatementController',
+    'metadata controller class' => 'TincanStatementMetadataController',
+    'views controller class' => 'TincanStatementDefaultViewsController',
+    'extra fields controller class' => 'TincanStatementExtraFieldsController',
+    'base table' => 'tincan_statement',
+    'fieldable' => TRUE,
+    'entity keys' => array(
+        'id' => 'id',
+        'statement_id' => 'statement_id',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'creation callback' => 'tincan_lrs_statement_create',
+    'access callback' => 'tincan_lrs_tincan_statement_access',
+    'module' => 'tincan_lrs',
+    'admin ui' => array(
+        'path' => 'tincan_statement',
+        'controller class' => 'TincanStatementUIController',
+       ),
+  );
+  
+// Tincan Agent entity definition
+ $return['tincan_agent'] = array(
+    'label' => t('Tincan Agent'),
+    'entity class' => 'TincanAgent',
+    'controller class' => 'TincanAgentController',
+    'metadata controller class' => 'TincanAgentMetadataController',
+    'views controller class' => 'TincanAgentDefaultViewsController',
+    'extra fields controller class' => 'TincanAgentExtraFieldsController',
+    'base table' => 'tincan_agent',
+    'fieldable' => TRUE,
+    'entity keys' => array(
+        'id' => 'id',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'creation callback' => 'tincan_lrs_agent_create',
+    'access callback' => 'tincan_lrs_tincan_agent_access',
+    'module' => 'tincan_lrs',
+    'admin ui' => array(
+        'path' => 'tincan_agent',
+        'controller class' => 'TincanAgentUIController',
+       ),
+  );  
+
+  // Tincan Activity 
+  $return['tincan_activity'] = array(
+    'label' => t('Tincan Activity'),
+    'entity class' => 'TincanActivity',
+    'controller class' => 'TincanActivityController',
+    'metadata controller class' => 'TincanActivityMetadataController',
+    'views controller class' => 'TincanActivityDefaultViewsController',
+    'extra fields controller class' => 'TincanActivityExtraFieldsController',
+    'base table' => 'tincan_activity',
+    'fieldable' => TRUE,
+    'entity keys' => array(
+        'id' => 'id',
+        'activity_id' => 'activity_id',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'creation callback' => 'tincan_lrs_activity_create',
+    'access callback' => 'tincan_lrs_tincan_activity_access',
+    'module' => 'tincan_lrs',
+    'admin ui' => array(
+        'path' => 'tincan_activity',
+        'controller class' => 'TincanActivityUIController',
+       ),
+  );
+  
+  // Tincan State
+  $return['tincan_state'] = array(
+    'label' => t('Tincan State'),
+    'entity class' => 'TincanState',
+    'controller class' => 'TincanStateController',
+    'metadata controller class' => 'TincanStateMetadataController',
+    'views controller class' => 'TincanStateDefaultViewsController',
+    'extra fields controller class' => 'TincanStateExtraFieldsController',
+    'base table' => 'tincan_state',
+    'fieldable' => TRUE,
+    'entity keys' => array(
+        'id' => 'id',
+        'state_id' => 'state_id',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'creation callback' => 'tincan_lrs_state_create',
+    'access callback' => 'tincan_lrs_tincan_state_access',
+    'module' => 'tincan_lrs',
+    'admin ui' => array(
+        'path' => 'tincan_state',
+        'controller class' => 'TincanStateUIController',
+       ),
+  );
+  
+  // Tincan Activity Profile
+  $return['tincan_activity_profile'] = array(
+    'label' => t('Tincan Activity Profile'),
+    'entity class' => 'TincanActivityProfile',
+    'controller class' => 'TincanActivityProfileController',
+    'metadata controller class' => 'TincanActivityProfileMetadataController',
+    'views controller class' => 'TincanActivityProfileDefaultViewsController',
+    'extra fields controller class' => 'TincanActivityProfileExtraFieldsController',
+    'base table' => 'tincan_activity_profile',
+    'fieldable' => TRUE,
+    'entity keys' => array(
+        'id' => 'id',
+        'profile_id' => 'profile_id',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'creation callback' => 'tincan_lrs_activity_profile_create',
+    'access callback' => 'tincan_lrs_tincan_activity_profile_access',
+    'module' => 'tincan_lrs',
+    'admin ui' => array(
+        'path' => 'tincan_activity_profile',
+        'controller class' => 'TincanActivityProfileUIController',
+       ),
+  );
+  
+  // Tincan Agent Profile
+  $return['tincan_agent_profile'] = array(
+    'label' => t('Tincan Agent Profile'),
+    'entity class' => 'TincanAgentProfile',
+    'controller class' => 'TincanAgentProfileController',
+    'metadata controller class' => 'TincanAgentProfileMetadataController',
+    'views controller class' => 'TincanAgentProfileDefaultViewsController',
+    'extra fields controller class' => 'TincanAgentProfileExtraFieldsController',
+    'base table' => 'tincan_agent_profile',
+    'fieldable' => TRUE,
+    'entity keys' => array(
+        'id' => 'id',
+        'profile_id' => 'profile_id',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'creation callback' => 'tincan_lrs_agent_profile_create',
+    'access callback' => 'tincan_lrs_tincan_agent_profile_access',
+    'module' => 'tincan_lrs',
+    'admin ui' => array(
+        'path' => 'tincan_agent_profile',
+        'controller class' => 'TincanAgentProfileUIController',
+       ),
+  );
+  
+return $return;
+}
+
+/*Statement properties getter functions */
+function tincan_lrs_verb_id_property_get($tincan_statement, array $options, $name, $type, $info) {
+//dsm($tincan_statement);
+//dsm($name);
+//dsm($type);
+//dsm($info);
+
+  if(isset($tincan_statement->json)){
+    $json_array = drupal_json_decode($tincan_statement->json);
+    if(isset($json_array['verb']['id'])) {
+      return $json_array['verb']['id'];
+    }
+    else return 'no verb id';
+  }
+  else return 'no json';
+}
+
+
+function _tincan_lrs_basic_json_validation($json,$context) {
+  $array = drupal_json_decode($json);
+  $json_result = json_last_error();
+  switch ($json_result) {
+    case JSON_ERROR_NONE:
+      return TRUE;
+    break;
+    case JSON_ERROR_DEPTH:
+      watchdog('lrs-json-validation','Maximum stack depth exceeded. Context: %d', array('%d' => $context), WATCHDOG_DEBUG);
+      return FALSE;
+    break;
+    case JSON_ERROR_STATE_MISMATCH:
+      watchdog('lrs-json-validation','Underflow or the modes mismatch. Context: %d', array('%d' => $context), WATCHDOG_DEBUG);
+      return FALSE;
+    break;
+    case JSON_ERROR_CTRL_CHAR:
+      watchdog('lrs-json-validation','Unexpected control character found. Context: %d', array('%d' => $context), WATCHDOG_DEBUG);
+      return FALSE;
+    break;
+    case JSON_ERROR_SYNTAX:
+      watchdog('lrs-json-validation','Syntax error, malformed JSON. Context: %d', array('%d' => $context), WATCHDOG_DEBUG);
+      return FALSE;
+    break;
+    case JSON_ERROR_UTF8:
+      watchdog('lrs-json-validation','Malformed UTF-8 characters, possibly incorrectly encoded. Context: %d', array('%d' => $context), WATCHDOG_DEBUG);
+      return FALSE;
+    break;
+    default:
+      watchdog('lrs-json-validation','Unknown error. Context: %d', array('%d' => $context), WATCHDOG_DEBUG);
+      return FALSE;
+    break;
+  }
+}
+
+/**
+ * Create a TincanStatement object.
+ */
+function tincan_lrs_statement_create($values = array()) {
+  return entity_get_controller('tincan_statement')->create($values);
+}
+
+function tincan_lrs_tincan_statement_access() {
+ return user_access('view tincan statements');
+}
+
+function tincan_lrs_tincan_statement_page_title($id) {
+  return $id;
+}
+
+function _tincan_lrs_statement_get_processor($parameters) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'tincan_statement');
+  
+  if(isset($parameters['statementId'])) {
+    $query->propertyCondition('statement_id', $parameters['statementId']);
+  }
+ 
+  $results = $query->execute();
+
+  if(isset($results['tincan_statement']) && count($results['tincan_statement'])){
+    $statements = array();
+    $eids = array();
+    
+    foreach($results['tincan_statement'] as $key => $result) {
+      $eids[] = $key;
+    }
+    
+    $entities = entity_load('tincan_statement',$eids);
+    
+    foreach($entities as $entity) {
+      $statements[] = drupal_json_decode($entity->json);
+    }
+    if(count($statements) == 1) {
+      return drupal_json_encode($statements[0]);
+    }
+    else {
+      return drupal_json_encode($statements);
+    }
+  }
+}
+
+function _tincan_lrs_statement_put_processor($content, $statementId='') {
+  $statement_json = $content;
+  $tincan_statement = array();
+  $tincan_statement['json'] = $statement_json;
+  $tincan_statement['statement_id'] = $statementId;
+
+
+  $tincan_statement_entity = tincan_lrs_statement_create($tincan_statement);
+ 
+  $tincan_statement_entity->populateEntityValues();
+  
+  $entity = $tincan_statement_entity->save();
+  
+   watchdog('lrs','Tincan Statement Entity:<pre>%d</pre>',array('%d' =>  print_r($tincan_statement_entity, 1)), WATCHDOG_DEBUG);
+   return $tincan_statement_entity->json;
+}
+
+function _tincan_lrs_statement_post_processor($content) {
+  return $content;
+}
+
+
+
+/**
+ * Create a TincanAgent object.
+ */
+function tincan_lrs_agent_create($values = array()) {
+  return entity_get_controller('tincan_agent')->create($values);
+}
+
+function tincan_lrs_tincan_agent_access() {
+ return user_access('view tincan agents');
+}
+
+
+/**
+ * Create a TincanActivity object.
+ */
+function tincan_lrs_activity_create($values = array()) {
+  return entity_get_controller('tincan_activity')->create($values);
+}
+
+function tincan_lrs_tincan_activity_access() {
+ return user_access('view tincan activities');
+}
+
+/**
+ * Create a TincanState object.
+ */
+function tincan_lrs_state_create($values = array()) {
+  return entity_get_controller('tincan_state')->create($values);
+}
+
+function tincan_lrs_tincan_state_access() {
+ return user_access('view tincan states');
+}
+
+/**
+ * Create a TincanActivityProfile object.
+ */
+function tincan_lrs_activity_profile_create($values = array()) {
+  return entity_get_controller('tincan_activity_profile')->create($values);
+}
+
+function tincan_lrs_tincan_activity_profile_access() {
+ return user_access('view tincan activity profiles');
+}
+
+/**
+ * Create a TincanAgentProfile object.
+ */
+function tincan_lrs_agent_profile_create($values = array()) {
+  return entity_get_controller('tincan_agent_profile')->create($values);
+}
+
+function tincan_lrs_tincan_agent_profile_access() {
+ return user_access('view tincan agent profiles');
+}

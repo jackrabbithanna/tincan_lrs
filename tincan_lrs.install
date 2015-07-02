@@ -1,0 +1,826 @@
+<?php
+
+function tincan_lrs_install() {
+  // Add the tincan_actor field and instance on the statement entity
+  if (!field_info_field('tincan_actor')) {
+    $field = array(
+      'field_name' => 'tincan_actor',
+      'type' => 'entityreference',
+      'cardinality' => 1,
+      'settings' => array(
+        'target_type' => 'tincan_agent',
+        'handler' => 'base',
+      ),
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_actor',
+          'entity_type' => 'tincan_statement',
+          'bundle' => 'tincan_statement',
+          'label' => 'Statement Actor',
+          'description' => 'Select the Agent that is the Actor in the Statement',
+          'widget' => array(
+            'type' => 'options_select',
+          ),
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  // Add the tincan_authority field and instance on the statement entity
+  if (!field_info_field('tincan_authority')) {
+    $field = array(
+      'field_name' => 'tincan_authority',
+      'type' => 'entityreference',
+      'cardinality' => 1,
+      'settings' => array(
+        'target_type' => 'tincan_agent',
+        'handler' => 'base',
+      ),
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_authority',
+          'entity_type' => 'tincan_statement',
+          'bundle' => 'tincan_statement',
+          'label' => 'Statement Authority',
+          'description' => 'Select the Agent that is the Authority for the Statement',
+          'widget' => array(
+            'type' => 'options_select',
+          ),
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  // Add the tincan_instructor field and instance on the statement entity
+  if (!field_info_field('tincan_instructor')) {
+    $field = array(
+      'field_name' => 'tincan_instructor',
+      'type' => 'entityreference',
+      'cardinality' => 1,
+      'settings' => array(
+        'target_type' => 'tincan_agent',
+        'handler' => 'base',
+      ),
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_instructor',
+          'entity_type' => 'tincan_statement',
+          'bundle' => 'tincan_statement',
+          'label' => 'Statement Context Instructor',
+          'description' => 'Select the Agent that is the Intstructor in the Context of the Statement',
+          'widget' => array(
+            'type' => 'options_select',
+          ),
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  // Add the tincan_team field and instance on the Statement entity
+  if (!field_info_field('tincan_team')) {
+    $field = array(
+      'field_name' => 'tincan_team',
+      'type' => 'entityreference',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'settings' => array(
+        'target_type' => 'tincan_agent',
+        'handler' => 'base',
+      ),
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_team',
+          'entity_type' => 'tincan_statement',
+          'bundle' => 'tincan_statement',
+          'label' => 'Team Context Group',
+          'description' => 'Select the Team members as part of a Statement context',
+          'widget' => array(
+            'type' => 'options_select',
+          ),
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+  // Add the tincan_result field and instance on the statement entity
+  if (!field_info_field('tincan_result')) {
+    $field = array(
+      'field_name' => 'tincan_result',
+      'type' => 'tincan_result',
+      'cardinality' => 1,
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_result',
+          'entity_type' => 'tincan_statement',
+          'bundle' => 'tincan_statement',
+          'label' => 'Statement Result',
+          'description' => 'Result of the Statement',
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+  // Add the tincan_verb field and instance on the statement entity
+  if (!field_info_field('tincan_verb')) {
+    $field = array(
+      'field_name' => 'tincan_verb',
+      'type' => 'tincan_verb',
+      'cardinality' => 1,
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_verb',
+          'entity_type' => 'tincan_statement',
+          'bundle' => 'tincan_statement',
+          'label' => 'Statement Verb',
+          'description' => 'Verb of the Statement',
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+  // Add the tincan_actor field and instance on the statement entity
+  if (!field_info_field('tincan_object')) {
+    $field = array(
+      'field_name' => 'tincan_object',
+      'type' => 'tincan_object',
+      'cardinality' => 1,
+      'settings' => array(
+         'handler' => 'base',
+      ),
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_object',
+          'entity_type' => 'tincan_statement',
+          'bundle' => 'tincan_statement',
+          'label' => 'Statement Object',
+          'description' => 'Select the entity that is the Object of the Statement',
+          'widget' => array(
+            'type' => 'options_select',
+          ),
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+    // Add the tincan_context field and instance on the statement entity
+  if (!field_info_field('tincan_context')) {
+    $field = array(
+      'field_name' => 'tincan_context',
+      'type' => 'tincan_context',
+      'cardinality' => 1,
+      'settings' => array(
+         'handler' => 'base',
+      ),
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_context',
+          'entity_type' => 'tincan_statement',
+          'bundle' => 'tincan_statement',
+          'label' => 'Statement Context',
+          'description' => 'Context of the Statement',
+          'widget' => array(
+            'type' => 'options_select',
+          ),
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+  // Add the tincan_interaction_component_choices field and instance on the activity entity
+  if (!field_info_field('tincan_interaction_com_choices')) {
+    $field = array(
+      'field_name' => 'tincan_interaction_com_choices',
+      'type' => 'tincan_interaction_component',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_interaction_com_choices',
+          'entity_type' => 'tincan_activity',
+          'bundle' => 'tincan_activity',
+          'label' => 'Choices Interaction Component',
+          'description' => 'Data for the Choices interaction component of a result of a statement',
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+  // Add the tincan_interaction_component_scale field and instance on the statement entity
+  if (!field_info_field('tincan_interaction_com_scale')) {
+    $field = array(
+      'field_name' => 'tincan_interaction_com_scale',
+      'type' => 'tincan_interaction_component',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_interaction_com_scale',
+          'entity_type' => 'tincan_activity',
+          'bundle' => 'tincan_activity',
+          'label' => 'Scale Interaction Component',
+          'description' => 'Data for the Scale interaction component of a result of a statement',
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+   // Add the tincan_interaction_component_source field and instance on the statement entity
+  if (!field_info_field('tincan_interaction_com_source')) {
+    $field = array(
+      'field_name' => 'tincan_interaction_com_source',
+      'type' => 'tincan_interaction_component',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_interaction_com_source',
+          'entity_type' => 'tincan_activity',
+          'bundle' => 'tincan_activity',
+          'label' => 'Source Interaction Component',
+          'description' => 'Data for the Source interaction component of a result of a statement',
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+    // Add the tincan_interaction_component_target field and instance on the statement entity
+  if (!field_info_field('tincan_interaction_com_target')) {
+    $field = array(
+      'field_name' => 'tincan_interaction_com_target',
+      'type' => 'tincan_interaction_component',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_interaction_com_target',
+          'entity_type' => 'tincan_activity',
+          'bundle' => 'tincan_activity',
+          'label' => 'Target Interaction Component',
+          'description' => 'Data for the Target interaction component of a result of a statement',
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+      // Add the tincan_interaction_component_steps field and instance on the statement entity
+  if (!field_info_field('tincan_interaction_com_steps')) {
+    $field = array(
+      'field_name' => 'tincan_interaction_com_steps',
+      'type' => 'tincan_interaction_component',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_interaction_com_steps',
+          'entity_type' => 'tincan_activity',
+          'bundle' => 'tincan_activity',
+          'label' => 'Steps Interaction Component',
+          'description' => 'Data for the Steps interaction component of a result of a statement',
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+  // Add the tincan_context_activity_parent field and instance on the statement entity
+  if (!field_info_field('tincan_context_activity_parent')) {
+    $field = array(
+      'field_name' => 'tincan_context_activity_parent',
+      'type' => 'entityreference',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'settings' => array(
+        'target_type' => 'tincan_activity',
+        'handler' => 'base',
+      ),
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_context_activity_parent',
+          'entity_type' => 'tincan_statement',
+          'bundle' => 'tincan_statement',
+          'label' => 'Statement Context Parent Activities',
+          'description' => 'Select the Activities that are the Parents in the Context Activities of the Statement',
+          'widget' => array(
+            'type' => 'options_select',
+          ),
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+  // Add the tincan_context_activity_grouping field and instance on the statement entity
+  if (!field_info_field('tincan_context_activity_grouping')) {
+    $field = array(
+      'field_name' => 'tincan_context_activity_grouping',
+      'type' => 'entityreference',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'settings' => array(
+        'target_type' => 'tincan_activity',
+        'handler' => 'base',
+      ),
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_context_activity_grouping',
+          'entity_type' => 'tincan_statement',
+          'bundle' => 'tincan_statement',
+          'label' => 'Statement Context Grouping Activities',
+          'description' => 'Select the Activities that are the Groupings in the Context Activities of the Statement',
+          'widget' => array(
+            'type' => 'options_select',
+          ),
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+    // Add the tincan_context_activity_category field and instance on the statement entity
+  if (!field_info_field('tincan_context_activity_category')) {
+    $field = array(
+      'field_name' => 'tincan_context_activity_category',
+      'type' => 'entityreference',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'settings' => array(
+        'target_type' => 'tincan_activity',
+        'handler' => 'base',
+      ),
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_context_activity_category',
+          'entity_type' => 'tincan_statement',
+          'bundle' => 'tincan_statement',
+          'label' => 'Statement Context Category Activities',
+          'description' => 'Select the Activities that are the Categories in the Context Activities of the Statement',
+          'widget' => array(
+            'type' => 'options_select',
+          ),
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+    // Add the tincan_context_activities_other field and instance on the statement entity
+  if (!field_info_field('tincan_context_activity_other')) {
+    $field = array(
+      'field_name' => 'tincan_context_activity_other',
+      'type' => 'entityreference',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'settings' => array(
+        'target_type' => 'tincan_activity',
+        'handler' => 'base',
+      ),
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_context_activity_other',
+          'entity_type' => 'tincan_statement',
+          'bundle' => 'tincan_statement',
+          'label' => 'Statement Context Other Activities',
+          'description' => 'Select the Activities that are the Others in the Context Activities of the Statement',
+          'widget' => array(
+            'type' => 'options_select',
+          ),
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+  // Add the tincan_group_members field and instance on the Agent entity, group bundle
+  if (!field_info_field('tincan_group_members')) {
+    $field = array(
+      'field_name' => 'tincan_group_members',
+      'type' => 'entityreference',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'settings' => array(
+        'target_type' => 'tincan_agent',
+        'handler' => 'base',
+      ),
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_group_members',
+          'entity_type' => 'tincan_agent',
+          'bundle' => 'tincan_agent',
+          'label' => 'Group Member Agents',
+          'description' => 'Select the Group Agent members.',
+          'widget' => array(
+            'type' => 'options_select',
+          ),
+        );
+    $new_instance = field_create_instance($instance);
+  }
+  
+  // Add the tincan_aagent field and instance on the state entity
+  if (!field_info_field('tincan_agent')) {
+    $field = array(
+      'field_name' => 'tincan_agent',
+      'type' => 'entityreference',
+      'cardinality' => 1,
+      'settings' => array(
+        'target_type' => 'tincan_agent',
+        'handler' => 'base',
+      ),
+    );
+    $new_field = field_create_field($field);
+    
+    $instance = array(
+          'field_name' => 'tincan_agent',
+          'entity_type' => 'tincan_state',
+          'bundle' => 'tincan_state',
+          'label' => 'State Agent',
+          'description' => 'Select the Agent of the State entity',
+          'widget' => array(
+            'type' => 'options_select',
+          ),
+        );
+    $new_instance = field_create_instance($instance);
+  }
+   
+}
+  
+function tincan_lrs_uninstall() {
+  /*$fields_to_delete = array(
+    'tincan_actor',
+    'tincan_verb',
+  );
+  foreach ($fields_to_delete as $field_name) {
+    field_delete_field($field_name);
+    
+  }*/
+  field_attach_delete_bundle('tincan_statement', 'tincan_statement');
+  field_attach_delete_bundle('tincan_state', 'tincan_state');
+  field_attach_delete_bundle('tincan_agent', 'agent');
+  field_attach_delete_bundle('tincan_agent', 'group');
+  field_attach_delete_bundle('tincan_agent', 'member');
+  field_attach_delete_bundle('tincan_agent_profile', 'tincan_agent_profile'); 
+  field_attach_delete_bundle('tincan_activity', 'tincan_activity');
+  field_attach_delete_bundle('tincan_activity_profile', 'tincan_activity_profile');
+  /**
+   * The fields aren't really deleted until the purge function runs, ordinarily
+   * during cron.  Count the number of fields we need to purge, and add five in
+   * case a few other miscellaneous fields are in there somehow.
+   */
+  field_purge_batch(100);
+}
+  
+function tincan_lrs_schema() {
+  $schema = array();
+
+ // Tincan Statement Entity	
+ $schema['tincan_statement'] = array(
+    'description' => 'The base table for Tincan Statement entities.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary Key: Drupal ID of Statement',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'stored' => array(
+        'description' => 'The Unix timestamp when the Statement entry was stored.',
+        'type' => 'varchar',
+        'length' => 75,
+        //'mysql_type' => 'datetime',      // The equivalent MySQL data type
+        //'pgsql_type' => 'timestamp',
+        //'sqlite_type' => 'VARCHAR', 
+        //'sqlsrv_type' => 'smalldatetime', 
+        'not null' => FALSE,
+       ),
+      'timestamp' => array(
+        'description' => 'The Unix timestamp when the events described within the statement occurred.',
+        'type' => 'varchar',
+        'length' => 75,
+       // 'mysql_type' => 'datetime',      // The equivalent MySQL data type
+      //  'pgsql_type' => 'timestamp',
+       // 'sqlite_type' => 'VARCHAR', 
+       // 'sqlsrv_type' => 'smalldatetime',
+        'not null' => FALSE,
+      ),
+      'version' => array(
+        'description' => 'Statement version',
+        'type' => 'varchar',
+				'length' => 25,
+        'not null' => FALSE,
+        'default' => '',
+      ),
+      'statement_id' => array(
+        'description' => 'Statement unique id.',
+        'type' => 'varchar',
+				'length' => 64,
+        'not null' => FALSE,
+        'default' => '',
+      ),
+      'object_type' => array(
+        'description' => 'Statement object. Generally only used for SubStatements.',
+        'type' => 'varchar',
+				'length' => 64,
+        'not null' => FALSE,
+        'default' => 'Statement',
+      ),
+      'json' => array(
+        'description' => 'The JSON data for this entity.',
+        'type' => 'blob',
+        'size' => 'normal',
+        
+      ),
+			
+    ),
+    'primary key' => array('id'),
+    'unique_keys' => array('statement_id'),
+    'indexes' => array(
+      'statement_id' => array('statement_id'),
+    ),
+  );	
+	
+	// Tincan Agent Entity	
+ $schema['tincan_agent'] = array(
+    'description' => 'The base table for Tincan Agent entities.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary Key: Drupal ID of Agent',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'object_type' => array(
+        'description' => 'Agent Object Type (either Agent or Group)',
+        'type' => 'varchar',
+				'length' => 10,
+        'not null' => TRUE,
+        'default' => 'Agent',
+      ),
+      'name' => array(
+        'description' => 'Full name of the Agent',
+        'type' => 'varchar',
+				'length' => 255,
+        'not null' => FALSE,
+        'default' => '',
+      ),
+			'mbox' => array(
+        'description' => 'mailto IRI of the Agent',
+        'type' => 'varchar',
+				'length' => 255,
+        'not null' => FALSE,
+        'default' => '',
+      ),
+      'mbox_sha1sum' => array(
+        'description' => 'The SHA1 hash of a mailto IRI',
+        'type' => 'char',
+        'not null' => FALSE,
+        'default' => '',
+      ),
+      'openid' => array(
+        'description' => 'An openID that uniquely identifies the Agent.',
+        'type' => 'varchar',
+				'length' => 255,
+        'not null' => FALSE,
+        'default' => '',
+      ),
+      'account_home_page' => array(
+        'description' => 'The canonical home page for the system the account is on.',
+        'type' => 'varchar',
+				'length' => 255,
+        'not null' => FALSE,
+        'default' => '',
+      ),
+      'account_name' => array(
+        'description' => 'The unique id or name used to log in to this account. Could be Drupal UID',
+        'type' => 'varchar',
+				'length' => 255,
+        'not null' => FALSE,
+        'default' => '',
+      ),
+      'json' => array(
+        'description' => 'The JSON data for this entity.',
+        'type' => 'blob',
+        'size' => 'normal',
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'object_type' => array('object_type'),
+      'mbox' => array('mbox'),
+      'account_name' => array('account_name'),
+      'account_home_page' => array('account_home_page'),
+    ),
+  );	
+  
+  // Tincan Activity Entity	
+ $schema['tincan_activity'] = array(
+    'description' => 'The base table for Tincan Statement entities.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary Key: Drupal ID of Statement',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'activity_id' => array(
+        'description' => 'An identifier for a single unique Activity',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+       ),
+      'object_type' => array(
+        'description' => 'MUST be "Activity" when present',
+        'type' => 'varchar',
+        'length' => 10,
+        'not null' => TRUE,
+        'default' => 'Activity',
+      ),
+      'name_en_us' => array(
+        'description' => 'American English Activity Name',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'description_en_us' => array(
+        'description' => 'American English Activity Description',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'type' => array(
+        'description' => 'The type of Activity (IRI)',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'more_info' => array(
+        'description' => '(IRL) Resolves to a document with human-readable information about the Activity.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'interaction_type' => array(
+        'description' => 'As in "cmi.interactions.n.type" as defined in the SCORM 2004 4th Edition Run-Time Environment',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'correct_responses_pattern' => array(
+        'description' => 'JSON Array of strings which make up the correct responses',
+        'type' => 'blob',
+        'size' => 'normal',
+        'not null' => FALSE,
+      ),
+      'interaction_components_json' => array(
+       'description' => 'JSON of the interaction components',
+       'type' => 'blob',
+       'size' => 'normal',
+      ),
+      'extensions' => array(
+        'description' => 'A map of other properties as needed',
+         'type' => 'blob',
+         'size' => 'normal', 
+         'not null' => FALSE,
+       ),
+      'name_json' => array(
+        'description' => 'The Activity Name JSON language map for this activity.',
+        'type' => 'blob',
+        'size' => 'normal',
+       ),
+      'description_json' => array(
+        'description' => 'The Activity Description JSON language map for this activity.',
+        'type' => 'blob',
+        'size' => 'normal',
+       ),
+      'definition_json' => array(
+        'description' => 'The Definition JSON data for this activity.',
+        'type' => 'blob',
+        'size' => 'normal',
+       ),
+      'json' => array(
+        'description' => 'The JSON data for this entity.',
+        'type' => 'blob',
+        'size' => 'normal',
+      ),
+	  ),
+    'primary key' => array('id'),
+    'unique_keys' => array('activity_id'),
+    'indexes' => array(
+      'activity_id' => array('activity_id'),
+    ),
+  );	
+	
+  // Tincan State Entity	
+ $schema['tincan_state'] = array(
+    'description' => 'The base table for Tincan State entities.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary Key: Drupal ID of State',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'state_id' => array(
+        'description' => 'State unique id.',
+        'type' => 'varchar',
+				'length' => 64,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'activity_id' => array(
+        'description' => 'Activity id providing context for this state.',
+        'type' => 'varchar',
+				'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'registration' => array(
+        'description' => 'Registration UUID',
+        'type' => 'varchar',
+				'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'json' => array(
+        'description' => 'The JSON data for this entity.',
+        'type' => 'blob',
+        'size' => 'normal',
+        
+      ),
+			
+    ),
+    'primary key' => array('id'),
+    'unique_keys' => array('state_id'),
+    'indexes' => array(
+      'state_id' => array('state_id'),
+    ),
+  );
+  
+  // Tincan Activity Profile Entity	
+ $schema['tincan_activity_profile'] = array(
+    'description' => 'The base table for Tincan Activity Profile entities.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary Key: Drupal ID of Activity Profile',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'profile_id' => array(
+        'description' => 'Profile unique id.',
+        'type' => 'varchar',
+				'length' => 64,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'activity_id' => array(
+        'description' => 'Activity id providing context for this activity profile.',
+        'type' => 'varchar',
+				'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'json' => array(
+        'description' => 'The JSON data for this entity.',
+        'type' => 'blob',
+        'size' => 'normal',
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique_keys' => array('profile_id'),
+    'indexes' => array(
+      'profile_id' => array('profile_id'),
+    ),
+  );
+  
+  
+    // Tincan Agent Profile Entity	
+ $schema['tincan_agent_profile'] = array(
+    'description' => 'The base table for Tincan Agent Profile entities.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary Key: Drupal ID of Agent Profile',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'profile_id' => array(
+        'description' => 'Profile unique id.',
+        'type' => 'varchar',
+				'length' => 64,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'json' => array(
+        'description' => 'The JSON data for this entity.',
+        'type' => 'blob',
+        'size' => 'normal',
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique_keys' => array('profile_id'),
+    'indexes' => array(
+      'profile_id' => array('profile_id'),
+    ),
+  );
+  return $schema;
+}

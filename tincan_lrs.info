@@ -1,0 +1,25 @@
+name = TinCan LRS
+description = TinCan API Compliant Learning Record Store
+core = 7.x
+package = TinCan
+version = "7.x-1.0-alpha"
+
+files[]=includes/Statement.php
+files[]=includes/Activity.php
+files[]=includes/Agent.php
+files[]=includes/State.php
+files[]=includes/ActivityProfile.php
+files[]=includes/AgentProfile.php
+
+files[]=views/views_handler_verb_id_field.inc
+files[]=views/views_handler_datetime_field.inc
+files[]=views/views_handler_datetime_filter.inc
+files[]=views/views_handler_datetime_argument.inc
+files[]=views/views_handler_datetime_sort.inc
+
+dependencies[] = uuid
+dependencies[] = services
+dependencies[] = entity
+dependencies[] = entityreference
+dependencies[] = views
+dependencies[] = tincan_lrs_fieldtypes
