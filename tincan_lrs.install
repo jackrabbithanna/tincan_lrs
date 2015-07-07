@@ -439,6 +439,19 @@ function tincan_lrs_install() {
           ),
         );
     $new_instance = field_create_instance($instance);
+    
+    $instance = array(
+          'field_name' => 'tincan_agent',
+          'entity_type' => 'tincan_agent_profile',
+          'bundle' => 'tincan_agent_profile',
+          'label' => 'Agent Profile Agent',
+          'description' => 'Select the Agent of the Agent Profile entity',
+          'widget' => array(
+            'type' => 'options_select',
+          ),
+        );
+    $new_instance = field_create_instance($instance);
+    
   }
    
 }
@@ -454,9 +467,7 @@ function tincan_lrs_uninstall() {
   }*/
   field_attach_delete_bundle('tincan_statement', 'tincan_statement');
   field_attach_delete_bundle('tincan_state', 'tincan_state');
-  field_attach_delete_bundle('tincan_agent', 'agent');
-  field_attach_delete_bundle('tincan_agent', 'group');
-  field_attach_delete_bundle('tincan_agent', 'member');
+  field_attach_delete_bundle('tincan_agent', 'tincan_agent');
   field_attach_delete_bundle('tincan_agent_profile', 'tincan_agent_profile'); 
   field_attach_delete_bundle('tincan_activity', 'tincan_activity');
   field_attach_delete_bundle('tincan_activity_profile', 'tincan_activity_profile');
@@ -737,21 +748,32 @@ function tincan_lrs_schema() {
         'description' => 'Registration UUID',
         'type' => 'varchar',
 				'length' => 255,
-        'not null' => TRUE,
+        'not null' => FALSE,
         'default' => '',
       ),
-      'json' => array(
-        'description' => 'The JSON data for this entity.',
+      'stored' => array(
+        'description' => 'When the document was stored.',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'updated' => array(
+        'description' => 'When the document was most recently modified.',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'contents' => array(
+        'description' => 'The contents of the state document.',
         'type' => 'blob',
         'size' => 'normal',
-        
       ),
-			
-    ),
+	  ),
     'primary key' => array('id'),
     'unique_keys' => array('state_id'),
     'indexes' => array(
       'state_id' => array('state_id'),
+      'activity_id' => array('activity_id'),
+      'registration' => array('registration'),
+      'stored' => array('stored'),
     ),
   );
   
@@ -779,8 +801,18 @@ function tincan_lrs_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      'json' => array(
-        'description' => 'The JSON data for this entity.',
+      'stored' => array(
+        'description' => 'When the document was stored.',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'updated' => array(
+        'description' => 'When the document was most recently modified.',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'contents' => array(
+        'description' => 'The contents of the state document.',
         'type' => 'blob',
         'size' => 'normal',
       ),
@@ -789,6 +821,8 @@ function tincan_lrs_schema() {
     'unique_keys' => array('profile_id'),
     'indexes' => array(
       'profile_id' => array('profile_id'),
+      'activity_id' => array('activity_id'),
+      'stored' => array('stored'),
     ),
   );
   
@@ -810,8 +844,18 @@ function tincan_lrs_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      'json' => array(
-        'description' => 'The JSON data for this entity.',
+      'stored' => array(
+        'description' => 'When the document was stored.',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'updated' => array(
+        'description' => 'When the document was most recently modified.',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'contents' => array(
+        'description' => 'The contents of the state document.',
         'type' => 'blob',
         'size' => 'normal',
       ),
@@ -820,6 +864,7 @@ function tincan_lrs_schema() {
     'unique_keys' => array('profile_id'),
     'indexes' => array(
       'profile_id' => array('profile_id'),
+      'stored' => array('stored'),
     ),
   );
   return $schema;

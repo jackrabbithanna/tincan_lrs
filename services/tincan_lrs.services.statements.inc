@@ -13,7 +13,7 @@ function _tincan_lrs_statements_index_handler($params) {
 }
 
 
-function _tincan_lrs_statements_get_handler($statementId = '') {
+function _tincan_lrs_statements_get_handler($statementId = '', $params) {
   watchdog('lrs', "get", array( ), WATCHDOG_DEBUG);
 
   if($statementId != '') $params = array('statementId' => $statementId);
@@ -28,7 +28,7 @@ function _tincan_lrs_statements_put_handler_access($op, $args) {
   return TRUE;
 }
 
-function _tincan_lrs_statements_put_handler($statementId, $data) {
+function _tincan_lrs_statements_put_handler($statementId, $params, $data) {
   $entityBody = file_get_contents('php://input',TRUE);
 watchdog('lrs', "put data: <pre>%d</pre>", array('%d' => print_r($data,1) ), WATCHDOG_DEBUG);
  
@@ -63,7 +63,7 @@ function _tincan_lrs_statements_post_handler_access($op, $args) {
   return TRUE;
 }
 
-function _tincan_lrs_statements_post_handler($data, $method) {
+function _tincan_lrs_statements_post_handler($data, $method, $params) {
 
   $entityBody = file_get_contents('php://input',TRUE);
 
@@ -93,16 +93,17 @@ function _tincan_lrs_statements_post_handler($data, $method) {
      //now shoot the results off to the handlers for the ?method parameter -- 
     switch ($method) {
       case 'GET':
-        $result = _tincan_lrs_statement_get_processor($content,$statementId);
+        $result = _tincan_lrs_statement_get_processor($content, $params, $statementId);
       break;
       case 'PUT':
-        $result = _tincan_lrs_statement_put_processor($content, $statementId);
+        $result = _tincan_lrs_statement_put_processor($content, $params, $statementId);
       break;
       case 'POST':
-        _tincan_lrs_statement_post_processor($content);
+        $result = _tincan_lrs_statement_post_processor($content, $params);
       break;
       case 'DELETE':
        // _tincan_lrs_statement_delete_processor($content);
+        $result = "can't delete statements";
       break;
       case 'none':
         $content = drupal_json_encode($data);

@@ -22,9 +22,72 @@ class TincanState extends Entity {
   protected function defaultUri() {
     return array('path' => 'tincan-states/' . $this->id);
   }
-  function toArray() {
-     return drupal_json_decode($this->json);
+  
+  function findAgent($json) {
+    $json_array = drupal_json_decode($json);
+    if(!isset($json_array['mbox']) &&
+       !isset($json_array['mbox_sha1sum']) &&
+       !isset($json_array['openid']) &&
+       (!isset($json_array['account']) && !isset($json_array['account']['homePage']) && ! isset($json_array['account']['name'])) ) {
+      return 0;  
+    }
+       
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type','tincan_agent');
+    if(isset($json_array['objectType'])) {
+      switch($json_array['objectType']) {
+        case 'Agent':
+          $query->propertyCondition('object_type','Agent');
+          break;
+        case 'Group':
+          $query->propertyCondition('object_type','Group');
+          break;
+      }
+    }
+    else {
+      $query->propertyCondition('object_type','Agent');
+    }
+    
+    if(isset($json_array['mbox'])) {
+      $query->propertyCondition('mbox',$json_array['mbox']);
+    }
+    if(isset($json_array['mbox_sha1sum'])) {
+      $query->propertyCondition('mbox_sha1sum',$json_array['mbox_sha1sum']);
+    }
+    if(isset($json_array['openid'])) {
+      $query->propertyCondition('openid',$json_array['openid']);
+    }
+    if(isset($json_array['account'])) {
+      if(isset($json_array['account']['homePage'])) {
+        $query->propertyCondition('account_home_page',$json_array['account']['homePage']);
+      }
+      if(isset($json_array['account']['name'])) {
+        $query->propertyCondition('account_name',$json_array['account']['name']);
+      }
+    }
+    $result = $query->execute();
+
+    if(isset($result['tincan_agent'])) {
+      foreach($result['tincan_agent'] as $key => $agent) {
+        return $key;
+      }
+    }
+    else return 0;
   }
+  
+  function createAgent($json) {
+    $values = array();
+    $target_id = 0;
+    $values['json'] = $json;
+
+    $tincan_agent_entity = tincan_lrs_agent_create($values);
+    $tincan_agent_entity->populateEntityValues();
+    $save_result = $tincan_agent_entity->save();
+    if($save_result) $target_id = $tincan_agent_entity->id;
+    
+    return $target_id;
+  }
+
 }
 
 /**
@@ -117,11 +180,27 @@ class TincanStateMetadataController extends EntityDefaultMetadataController {
         'getter callback' => 'entity_property_verbatim_get',
         'setter callback' => 'entity_property_verbatim_set',
       );
-      $info[$this->type]['properties']['json'] = array(
-        'label' => t("State JSON"), 
+      $info[$this->type]['properties']['stored'] = array(
+        'label' => t("Stored"), 
+        'type' => 'date', 
+        'description' => t("The stored date"),
+        'schema field' => 'stored',
+        'getter callback' => 'entity_property_verbatim_get',
+        'setter callback' => 'entity_property_verbatim_set',
+      );
+      $info[$this->type]['properties']['updated'] = array(
+        'label' => t("Updated"), 
+        'type' => 'date', 
+        'description' => t("The updated date"),
+        'schema field' => 'updated',
+        'getter callback' => 'entity_property_verbatim_get',
+        'setter callback' => 'entity_property_verbatim_set',
+      );
+      $info[$this->type]['properties']['contents'] = array(
+        'label' => t("Document contents"), 
         'type' => 'text', 
-        'description' => t("The JSON representation of the state"),
-        'schema field' => 'json',
+        'description' => t("The binary data constituting the document."),
+        'schema field' => 'contents',
         'getter callback' => 'entity_property_verbatim_get',
         'setter callback' => 'entity_property_verbatim_set',
       );

@@ -99,11 +99,27 @@ class TincanAgentProfileMetadataController extends EntityDefaultMetadataControll
         'getter callback' => 'entity_property_verbatim_get',
         'setter callback' => 'entity_property_verbatim_set',
       );
-      $info[$this->type]['properties']['json'] = array(
-        'label' => t("Agent Profile JSON"), 
+      $info[$this->type]['properties']['stored'] = array(
+        'label' => t("Stored"), 
+        'type' => 'date', 
+        'description' => t("The stored date"),
+        'schema field' => 'stored',
+        'getter callback' => 'entity_property_verbatim_get',
+        'setter callback' => 'entity_property_verbatim_set',
+      );
+      $info[$this->type]['properties']['updated'] = array(
+        'label' => t("Updated"), 
+        'type' => 'date', 
+        'description' => t("The updated date"),
+        'schema field' => 'updated',
+        'getter callback' => 'entity_property_verbatim_get',
+        'setter callback' => 'entity_property_verbatim_set',
+      );
+      $info[$this->type]['properties']['contents'] = array(
+        'label' => t("Document contents"), 
         'type' => 'text', 
-        'description' => t("The JSON representation of the agent profile"),
-        'schema field' => 'json',
+        'description' => t("The binary data constituting the document."),
+        'schema field' => 'contents',
         'getter callback' => 'entity_property_verbatim_get',
         'setter callback' => 'entity_property_verbatim_set',
       );

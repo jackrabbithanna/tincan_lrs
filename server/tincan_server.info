@@ -1,0 +1,16 @@
+name = Tincan Server
+description = Provides an Tincan REST server.
+package = Services - servers
+
+files[] = tincan_server.module
+
+files[] = includes/TinCanRESTServer.inc
+files[] = includes/ServicesTinCanRESTServerFactory.inc
+
+dependencies[] = services
+dependencies[] = rest_server
+dependencies[] = libraries (>=2.x)
+
+core = 7.x
+
+

@@ -78,7 +78,7 @@ class TincanAgent extends Entity {
        
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type','tincan_agent');
-    //$query->entityCondition('type','agent');
+    $query->propertyCondition('object_type','Agent');
     
     if(isset($json_array['mbox'])) {
       $query->propertyCondition('mbox',$json_array['mbox']);

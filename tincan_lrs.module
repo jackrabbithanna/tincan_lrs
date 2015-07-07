@@ -112,6 +112,14 @@ function tincan_lrs_services_resources() {
             'source' => array('path' => '0'),
             'optional' => TRUE,
           ),
+          array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
         ), // end args array
       ), // end retrieve array
      
@@ -142,6 +150,14 @@ function tincan_lrs_services_resources() {
             'optional' => TRUE,
             'default value' => 'none',
           ),
+          array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
         ), // end args array
       ), // end create array
       
@@ -162,6 +178,15 @@ function tincan_lrs_services_resources() {
             'type' => 'string',
             'source' => array('path' => '0'),
             'optional' => TRUE,
+            'default value' => 'none',
+          ),
+          array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
           ),
           array(
             'name' => 'data',
@@ -211,47 +236,332 @@ function tincan_lrs_services_resources() {
         'access arguments' => array('create'),
         'access arguments append' => TRUE,
         'args' => array(
-        /*  array(
-            'name' => 'activity_type',
-            'type' => 'int',
-            'description' => 'Activity type that is being accessed',
-            'source' => array('path' => '0'),
-            'optional' => TRUE,
-          ),*/
            array(
-            'name' => 'activityId',
-            'type' => 'string',
-            'source' => array('path' => '0'),
-            'optional' => FALSE,
+             'name' => 'activityId',
+             'type' => 'string',
+             'source' => array('path' => '0'),
+             'optional' => TRUE,
+             'default value' => '0',
+           ),
+           array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
           ),
-          
         ), //end args array
       ), // end retrieve array
-    ), //end activities array
       
-     'state' => array(
-      'retrieve' => array(
-        'help' => 'Activities State Get',
+      'update'=> array(
+        'help' => 'Activities API PUT',
         'file' => array(
           'type' => 'inc',
           'module' => 'tincan_lrs',
           'name' => 'services/tincan_lrs.services.activities',
         ),
-        'callback' => '_tincan_lrs_activities_state_get_handler',
-        'access callback' => '_tincan_lrs_activities_state_get_handler_access',
+        'callback' => '_tincan_lrs_activities_put_handler',
+        'access callback' => '_tincan_lrs_activities_put_handler_access',
+        'access arguments' => array('create'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+             'name' => 'activityType',
+             'type' => 'string',
+             'source' => array('path' => '0'),
+             'optional' => TRUE,
+             'default value' => '0',
+           ),
+          array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+          array(
+            'name' => 'data',
+            'type' => 'struct',
+            'description' => 'The activities data object',
+            'source' => 'data',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+        ), // end args array
+      ), // end update array
+      
+      'create'=> array(
+        'help' => 'Activities API POST',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.activities',
+        ),
+        'callback' => '_tincan_lrs_activities_post_handler',
+        'access callback' => '_tincan_lrs_activities_post_handler_access',
+        'access arguments' => array('create'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+            'name' => 'data',
+            'type' => 'struct',
+            'description' => 'The activities data object',
+            'source' => 'data',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+          array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+          array(
+             'name' => 'activityType',
+             'type' => 'string',
+             'source' => array('path' => '0'),
+             'optional' => TRUE,
+             'default value' => '0',
+           ),
+        ), // end args array
+      ), // end create array
+      
+      'index'=> array(
+        'help' => 'Activities Index',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.activities',
+        ),
+        'callback' => '_tincan_lrs_activities_index_handler',
+        'access callback' => '_tincan_lrs_activities_index_handler_access',
+        'access arguments' => array('view'),
+        'access arguments append' => TRUE,
+        'args' => array(
+           array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+        ), //end args array
+      ), // end retrieve array
+      
+      'delete'=> array(
+        'help' => 'Activities API Delete',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.activities',
+        ),
+        'callback' => '_tincan_lrs_activities_delete_handler',
+        'access callback' => '_tincan_lrs_activities_delete_handler_access',
+        'access arguments' => array('delete'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+             'name' => 'activityType',
+             'type' => 'string',
+             'source' => array('path' => '0'),
+             'optional' => TRUE,
+             'default value' => '0',
+           ),
+          array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+          array(
+            'name' => 'data',
+            'type' => 'struct',
+            'description' => 'The activities data object',
+            'source' => 'data',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+        ), // end args array
+      ), // end delete array
+    ), //end activities array
+    
+    
+    'agents' => array(
+      'retrieve'=> array(
+        'help' => 'Agents GET',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.agents',
+        ),
+        'callback' => '_tincan_lrs_agents_get_handler',
+        'access callback' => '_tincan_lrs_agents_get_handler_access',
         'access arguments' => array('create'),
         'access arguments append' => TRUE,
         'args' => array(
            array(
-            'name' => 'stateId',
-            'type' => 'string',
-            'source' => array('path' => '0'),
-            'optional' => FALSE,
+             'name' => 'agentId',
+             'type' => 'string',
+             'source' => array('path' => '0'),
+             'optional' => TRUE,
+             'default value' => '0',
+           ),
+           array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
           ),
         ), //end args array
-      ), //end retrieve array
+      ), // end retrieve array
       
-    ), //end activities/state array
+       'update'=> array(
+        'help' => 'Agents API PUT',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.agents',
+        ),
+        'callback' => '_tincan_lrs_agents_put_handler',
+        'access callback' => '_tincan_lrs_agents_put_handler_access',
+        'access arguments' => array('create'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+             'name' => 'agentType',
+             'type' => 'string',
+             'source' => array('path' => '0'),
+             'optional' => TRUE,
+             'default value' => '0',
+           ),
+          array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+          array(
+            'name' => 'data',
+            'type' => 'struct',
+            'description' => 'The agents data object',
+            'source' => 'data',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+        ), // end args array
+      ), // end update array
+      
+      'create'=> array(
+        'help' => 'Agents API POST',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.agents',
+        ),
+        'callback' => '_tincan_lrs_agents_post_handler',
+        'access callback' => '_tincan_lrs_agents_post_handler_access',
+        'access arguments' => array('create'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+            'name' => 'data',
+            'type' => 'struct',
+            'description' => 'The agents data object',
+            'source' => 'data',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+          array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+          array(
+             'name' => 'agentType',
+             'type' => 'string',
+             'source' => array('path' => '0'),
+             'optional' => TRUE,
+             'default value' => '0',
+           ),
+        ), // end args array
+      ), // end create array
+      
+      'index'=> array(
+        'help' => 'Agents Index',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.agents',
+        ),
+        'callback' => '_tincan_lrs_agents_index_handler',
+        'access callback' => '_tincan_lrs_agents_index_handler_access',
+        'access arguments' => array('view'),
+        'access arguments append' => TRUE,
+        'args' => array(
+           array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+        ), //end args array
+      ), // end index array
+      
+      'delete'=> array(
+        'help' => 'Agents API Delete',
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'tincan_lrs',
+          'name' => 'services/tincan_lrs.services.agents',
+        ),
+        'callback' => '_tincan_lrs_agents_delete_handler',
+        'access callback' => '_tincan_lrs_agents_delete_handler_access',
+        'access arguments' => array('delete'),
+        'access arguments append' => TRUE,
+        'args' => array(
+          array(
+             'name' => 'agentType',
+             'type' => 'string',
+             'source' => array('path' => '0'),
+             'optional' => TRUE,
+             'default value' => '0',
+           ),
+          array(
+            'name' => 'parameters',
+            'type' => 'array',
+            'description' => '',
+            'source' => 'param',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+          array(
+            'name' => 'data',
+            'type' => 'struct',
+            'description' => 'The activities data object',
+            'source' => 'data',
+            'optional' => TRUE,
+            'default value' => array(),
+          ),
+        ), // end args array
+      ), // end delete array
+    ), //end agents array
+    
     
     'about' => array(
       'index' => array(
@@ -279,6 +589,54 @@ function tincan_lrs_services_resources() {
      ), //end about resource
   ); //end return array
     
+}
+
+/**
+ * Triggered when the REST server request a list of supported response formats.
+ *
+ * @param array $formatters
+ *  An associative array of formatter info arrays keyed by type extension. The
+ *  formatter info specifies an array of 'mime types' that corresponds to the
+ *  output format; a 'formatter class' class implements ServicesFormatterInterface
+ *  and is responsible for encoding the output.
+ * @return void
+ */
+function tincan_lrs_rest_server_response_formatters_alter(&$formatters) {
+  $formatters['xapi'] = array(
+        'mime types' => array('application/json', 'text/javascript'),
+        'formatter class' => 'ServicesTinCanFormatter',
+      );
+}
+
+/**
+ * Triggered when the REST server request a list of available request parsers.
+ *
+ * @param array $parsers
+ *  An associative array of parser callbacks keyed by mime-type.
+ * @return void
+ */
+ /*
+function tincan_lrs_rest_server_request_parsers_alter(&$parsers) {
+  $parsers['application/json'] = 'ServicesTinCanParserJSON';
+}
+*/
+/**
+ * Allow to alter arguments before they are passed to service callback.
+ *
+ * @param $controller
+ *   Controller definition
+ * @param $args
+ *   Array of arguments
+ * @param $options
+ *
+ * @see services_controller_execute()
+ * @see services.runtime.inc
+ */
+function tincan_lrs_services_request_preprocess_alter($controller, &$args, $options) {
+  watchdog('request preprocess alter hook', 'controller: <pre>%d</pre>', array('%d' => print_r($controller,1)), WATCHDOG_DEBUG);
+  watchdog('request preprocess alter hook', 'args: <pre>%d</pre>', array('%d' => print_r($args,1)), WATCHDOG_DEBUG);
+  watchdog('request preprocess alter hook', 'options: <pre>%d</pre>', array('%d' => print_r($options,1)), WATCHDOG_DEBUG);
+
 }
 
 function tincan_lrs_entity_info() {
@@ -500,13 +858,17 @@ function tincan_lrs_tincan_statement_access() {
 function tincan_lrs_tincan_statement_page_title($id) {
   return $id;
 }
-
-function _tincan_lrs_statement_get_processor($parameters) {
+/* 
+ * Processor for GET requests to resource "statements"
+ */
+function _tincan_lrs_statement_get_processor($content, $params, $statementId = FALSE) {
+ watchdog('lrs state get handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+  watchdog('lrs state get handler', 'Content: <pre>%d</pre>', array('%d' => print_r($content,1)), WATCHDOG_DEBUG);
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'tincan_statement');
   
   if(isset($parameters['statementId'])) {
-    $query->propertyCondition('statement_id', $parameters['statementId']);
+    $query->propertyCondition('statement_id', $params['statementId']);
   }
  
   $results = $query->execute();
@@ -533,11 +895,16 @@ function _tincan_lrs_statement_get_processor($parameters) {
   }
 }
 
-function _tincan_lrs_statement_put_processor($content, $statementId='') {
+/* 
+ * Processor for PUT requests to resource "statements"
+ */
+function _tincan_lrs_statement_put_processor($content, $params, $statementId='') {
+  watchdog('lrs statement put handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+  watchdog('lrs statement put handler', 'Content: <pre>%d</pre>', array('%d' => print_r($content,1)), WATCHDOG_DEBUG);
   $statement_json = $content;
   $tincan_statement = array();
   $tincan_statement['json'] = $statement_json;
-  $tincan_statement['statement_id'] = $statementId;
+  if ($statementId != '') $tincan_statement['statement_id'] = $statementId;
 
 
   $tincan_statement_entity = tincan_lrs_statement_create($tincan_statement);
@@ -550,7 +917,10 @@ function _tincan_lrs_statement_put_processor($content, $statementId='') {
    return $tincan_statement_entity->json;
 }
 
-function _tincan_lrs_statement_post_processor($content) {
+/* 
+ * Processor for POST requests to resource "statements"
+ */
+function _tincan_lrs_statement_post_processor($content, $params) {
   return $content;
 }
 
@@ -567,6 +937,9 @@ function tincan_lrs_tincan_agent_access() {
  return user_access('view tincan agents');
 }
 
+function  _tincan_lrs_agents_get_processor($params) {
+  return 'Agents get: '; 
+}
 
 /**
  * Create a TincanActivity object.
@@ -579,7 +952,16 @@ function tincan_lrs_tincan_activity_access() {
  return user_access('view tincan activities');
 }
 
-/**
+/*
+ * Processor for GET requests to resource "activities"
+ */ 
+function  _tincan_lrs_activity_get_processor($params, $activityId = '') {
+  $activityId = isset($params['activityId']) ? $params['activityId'] : FALSE;
+  return 'Activities get: ' . $activityId; 
+}
+
+
+/*
  * Create a TincanState object.
  */
 function tincan_lrs_state_create($values = array()) {
@@ -588,6 +970,131 @@ function tincan_lrs_state_create($values = array()) {
 
 function tincan_lrs_tincan_state_access() {
  return user_access('view tincan states');
+}
+
+function _tincan_lrs_tincan_find_state($activityId, $agent_json, $registration, $stateId) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type','tincan_state');
+  if($activityId) $query->propertyCondition('activity_id', $activityId);
+  if($registration) $query->propertyCondition('registration', $registration);
+  if($stateId) $query->propertyCondition('state_id', $stateId);
+ 
+  if($agent_json) {
+    $temp_state = tincan_lrs_state_create();
+    $agent_id = $temp_state->findAgent($agent_json);
+    if($agent_id) {
+      $query->fieldCondition('tincan_agent', 'target_id', $agent_id, '=');
+    }
+    else return 0;  
+  }
+  
+  $result = $query->execute();
+
+  if(isset($result['tincan_state'])) {
+    foreach($result['tincan_state'] as $key => $agent) {
+      return $key;
+    }
+  }
+  else return 0;
+}
+
+/* 
+ * Processor for GET requests to resource "activities", with url parameter "state"
+ */
+function _tincan_lrs_activity_state_get_processor($params, $stateId = '') {
+  watchdog('lrs state get handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+  if(!$stateId) {
+    $stateId = isset($params['stateId']) ? $params['stateId'] : FALSE;
+  }
+  $activityId = isset($params['activityId']) ? $params['activityId'] : FALSE;
+  $agent_json = isset($params['agent']) ? $params['agent'] : FALSE;
+  $registration = isset($params['registration']) ? $params['registration'] : FALSE;
+  
+  $eid = _tincan_lrs_tincan_find_state($activityId, $agent_json, $registration, $stateId);
+  if($eid) {
+    $state_entity = entity_load_single('tincan_state', $eid);
+    watchdog('lrs state get handler', 'found contents: <pre>%d</pre>', array('%d' => print_r($state_entity->contents,1)), WATCHDOG_DEBUG);
+    $return = array();
+    $return['binary'] = $state_entity->contents;
+    return $return;
+    
+  }
+  else {
+    return 'no activity states found';
+  }
+}
+
+/* 
+ * Processor for PUT requests to resource "activities", with url parameter "state"
+ */
+function _tincan_lrs_activity_state_put_processor($params, $content, $stateId = FALSE) {
+  watchdog('lrs state put handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+  watchdog('lrs state put handler', 'Content: <pre>%d</pre>', array('%d' => print_r($content,1)), WATCHDOG_DEBUG);
+  
+  if(!$stateId) {
+    $stateId = isset($params['stateId']) ? $params['stateId'] : FALSE;
+  }
+  $activityId = isset($params['activityId']) ? $params['activityId'] : FALSE;
+  $agent_json = isset($params['agent']) ? $params['agent'] : FALSE;
+  $registration = isset($params['registration']) ? $params['registration'] : FALSE;
+  $document = isset($params['content']) ? $params['content'] : FALSE;
+  $eid = _tincan_lrs_tincan_find_state($activityId, $agent_json, $registration, $stateId);
+  watchdog('lrs state put handler', 'EID: <pre>%d</pre>', array('%d' => $eid), WATCHDOG_DEBUG);
+  
+  if($eid) {
+    $state_entity = entity_load_single('tincan_state', $eid);
+    $state_entity->updated = strtotime("now");
+    if($document) $state_entity->contents = $document; 
+    
+  }
+  else {
+    $values = array();
+    if($activityId) $values['activity_id'] = $activityId;
+    if($registration) $values['registration'] = $registration;
+    if($stateId) $values['state_id'] = $stateId;
+    $values['stored'] = strtotime("now");
+    $values['updated'] = strtotime("now");
+    if($document) $values['contents'] = $document; 
+    $state_entity = tincan_lrs_state_create($values);
+    if($agent_json) {
+      $agent_id = $state_entity->findAgent($agent_json);
+      if($agent_id) {
+        $state_entity->tincan_agent[LANGUAGE_NONE][0]['target_id'] = $agent_id;
+      }
+      else {
+        $agent_id = $state_entity->createAgent($agent_json);
+        $state_entity->tincan_agent[LANGUAGE_NONE][0]['target_id'] = $agent_id;
+      }
+    }
+   
+  }
+  try {
+    $state_entity->save();
+  }
+  catch(Exception $e) {
+    watchdog('lrs state put handler', 'Entity create error: <pre>%d</pre>', array('%d' => $e->getMessage()), WATCHDOG_DEBUG);
+    return 'fail: ' . $e->getMessage();
+  }
+  return 'success';
+  
+} 
+ 
+/* 
+ * Processor for POST requests to resource "activities", with url parameter "state"
+ */
+function _tincan_lrs_activity_state_post_processor($params, $content) {
+  watchdog('lrs state post handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+  watchdog('lrs state post handler', 'Content: <pre>%d</pre>', array('%d' => print_r($content,1)), WATCHDOG_DEBUG);
+  return 'activity state post';
+}
+
+/* 
+ * Processor for DELETE requests to resource "activities", with url parameter "state"
+ */
+function _tincan_lrs_activity_state_delete_processor($params, $content, $stateId = '') {
+  watchdog('lrs state delete handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+  watchdog('lrs state delete handler', 'Content: <pre>%d</pre>', array('%d' => print_r($content,1)), WATCHDOG_DEBUG);
+  return 'activity state delete';
 }
 
 /**
@@ -601,6 +1108,46 @@ function tincan_lrs_tincan_activity_profile_access() {
  return user_access('view tincan activity profiles');
 }
 
+/* 
+ * Processor for GET requests to resource "activities", with url parameter "profile"
+ */
+function _tincan_lrs_activity_profiles_get_processor($params, $profileId = '') {
+  if($profileId == '') $profileId = isset($params['profileId']) ? $params['profileId'] : FALSE;
+  watchdog('lrs activity profile get handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+  
+  return 'Activities Profile (get): ' . $profileId;
+}
+
+/* 
+ * Processor for PUT requests to resource "activities", with url parameter "profile"
+ */
+function _tincan_lrs_activity_profiles_put_processor($params, $content, $profileId = '') {
+  watchdog('lrs activity profile put handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+  watchdog('lrs activity profile put handler', 'Content: <pre>%d</pre>', array('%d' => print_r($content,1)), WATCHDOG_DEBUG);
+
+  return 'activity profile put';
+}
+
+/* 
+ * Processor for POST requests to resource "activities", with url parameter "profile"
+ */
+function _tincan_lrs_activity_profiles_post_processor($params, $content) {
+  watchdog('lrs activity profile post handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+  watchdog('lrs activity profile post handler', 'Content: <pre>%d</pre>', array('%d' => print_r($content,1)), WATCHDOG_DEBUG);
+
+  return 'activity profile post';
+}
+
+/* 
+ * Processor for DELETE requests to resource "activities", with url parameter "profile"
+ */
+function _tincan_lrs_activity_profiles_delete_processor($params, $content, $profileId = '') {
+  watchdog('lrs activity profile delete handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+  watchdog('lrs activity profile delete handler', 'Content: <pre>%d</pre>', array('%d' => print_r($content,1)), WATCHDOG_DEBUG);
+
+  return 'activity profile delete';
+} 
+
 /**
  * Create a TincanAgentProfile object.
  */
@@ -611,3 +1158,44 @@ function tincan_lrs_agent_profile_create($values = array()) {
 function tincan_lrs_tincan_agent_profile_access() {
  return user_access('view tincan agent profiles');
 }
+
+/* 
+ * Processor for GET requests to resource "agents", with url parameter "profile"
+ */
+function _tincan_lrs_agent_profiles_get_processor($params) {
+  watchdog('lrs agent profile get handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+ 
+
+  $profileId = isset($params['profileId']) ? $params['profileId'] : FALSE;
+  return '(GET) Agents Profile: ' . $profileId;
+}
+
+/* 
+ * Processor for PUT requests to resource "agents", with url parameter "profile"
+ */
+function _tincan_lrs_agent_profiles_put_processor($params, $content, $profileId = FALSE) {
+   watchdog('lrs agent profile put handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+   watchdog('lrs agent profile put handler', 'Content: <pre>%d</pre>', array('%d' => print_r($content,1)), WATCHDOG_DEBUG);
+
+   return 'Agents Profile PUT: ';
+}
+
+/* 
+ * Processor for POST requests to resource "agents", with url parameter "profile"
+ */
+function _tincan_lrs_agent_profiles_post_processor($params, $content) {
+  watchdog('lrs agent profile post handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+  watchdog('lrs agent profile post handler', 'Content: <pre>%d</pre>', array('%d' => print_r($content,1)), WATCHDOG_DEBUG);
+
+  return 'agent profile post';
+}
+
+/* 
+ * Processor for DELETE requests to resource "agents", with url parameter "profile"
+ */
+function _tincan_lrs_agent_profiles_delete_processor($params, $content, $profileId = '') {
+  watchdog('lrs agent profile delete handler', 'Params: <pre>%d</pre>', array('%d' => print_r($params,1)), WATCHDOG_DEBUG);
+  watchdog('lrs agent profile delete handler', 'Content: <pre>%d</pre>', array('%d' => print_r($content,1)), WATCHDOG_DEBUG);
+
+  return 'agent profile delete';
+} 
